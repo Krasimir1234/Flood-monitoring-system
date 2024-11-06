@@ -17,5 +17,12 @@ def home():
     map_html = map._repr_html_()
     return render_template("home.html", map_html=map_html)
 
+@app.route('/Login')
+def login():
+    return render_template('login.html')
+
+@app.route('/Signup')
+def signup():
+    return render_template('signup.html')
 if __name__ == '__main__':
     app.run(debug=True)
