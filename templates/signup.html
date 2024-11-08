@@ -2,35 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+    <link rel="stylesheet" href="signup.css">
 </head>
 <body>
+
     <div class="login-container">
         <div class="login-box">
             <h2>Sign Up</h2>
+            
             <form id="signupForm">
                 <div class="input-group">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" placeholder="Enter your username" required>
+                    <label for="realName">First Name</label>
+                    <input type="text" id="realName" name="realName" placeholder="Enter your first name" required>
                 </div>
+                
+                <div class="input-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Enter your email" required>
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
                 </div>
+                
                 <div class="input-group">
                     <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Create a password" required>
+                    <input type="password" id="password" name="password" placeholder="Enter your password" required>
                 </div>
-                <button type="button" class="login-btn" onclick="handleSignUp()">Sign Up</button>
-                <div class="extra-links">
-                    <a href="#" onclick="alertLogin()">Already have an account? Log In</a>
-                </div>
+
+                <button type="submit" class="login-btn">Sign Up</button>
             </form>
+
+            <div class="extra-links">
+               
+                <a href="login.html">Already have an account? Log In</a>
+            </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='Js/signup.js') }}"></script>
+
+    <script src="signup.js"></script>
 </body>
 </html>
