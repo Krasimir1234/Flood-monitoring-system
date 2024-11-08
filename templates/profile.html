@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+
+    <!-- Linking CSS file -->
+    <link rel="stylesheet" href="profile.css">
+</head>
+<body>
+
+    <!-- Container -> profile page -->
+    <div class="profile-container">
+        <h1>User Profile</h1>
+        
+        <!-- Picture -->
+        <div class="profile-pic">
+            <img src="default-profile.jpg" alt="Profile Picture" id="profilePic">
+            <button onclick="changeProfilePic()">Change Picture</button>
+            <input type="file" id="fileInput" style="display:none;" onchange="uploadPicture()">
+        </div>
+
+        <!-- info -->
+        <div class="profile-info">
+            <label>Name:</label>
+            <span id="nameDisplay">Hannah Peterson</span>
+            <input type="text" id="nameInput" style="display:none;" value="Hannah Peterson">
+            <br>
+
+            <label>Email:</label>
+            <span id="emailDisplay">hannah.111@gmail.com</span>
+            <input type="email" id="emailInput" style="display:none;" value="hannah.111@gmail.com">
+            <br>
+
+            <label>Username:</label>
+            <span id="usernameDisplay">hannah</span>
+            <input type="email" id="usernameInput" style="display:none;" value="hannah.111@gmail.com">
+            <br>
+        </div>
+
+        <!-- Edit, Save -->
+        <button id="editBtn" onclick="editProfile()">Edit Profile</button>
+        <button id="saveBtn" onclick="saveProfile()" style="display:none;">Save Changes</button>
+    </div>
+
+
+    <!-- Unverified Report Submission - Basic User-->
+    <section class="report-submission">
+        <h2>Submit a Report</h2>
+        <form id="reportForm">
+            <label for="reportStatus">Report Status:</label>
+            <input type="text" id="reportStatus" value="Unverified" readonly>
+
+            <label for="reportDescription">Description:</label>
+            <textarea id="reportDescription" placeholder="Describe the flood condition and add media to back up your claim." required></textarea>
+
+            <label for="reportImage">Upload Image:</label>
+            <input type="file" id="reportImage" accept="image/*">
+
+            <label for="reportVideo">Upload Video:</label>
+            <input type="file" id="reportVideo" accept="video/*">
+
+            <label for="reportLocation">Location (Required):</label>
+            <input type="text" id="reportLocation" placeholder="Enter location">
+
+            <button type="button" onclick="submitReport()">Submit Report</button>
+        </form>
+    </section>
+
+
+
+    <!-- Verification Section for Government -->
+    <section class="verification-section" id="verificationSection" style="display: none;">
+        <h2>Verify Reports (Government Only)</h2>
+        <div id="reportList"></div>
+    </section>
+
+
+    <footer>
+        <p>Contact Support | Privacy Policy | Terms of Service</p>
+    </footer>
+
+    <!-- JavaScript file linkage-->
+    <script src="profile.js"></script>
+</body>
+</html>
