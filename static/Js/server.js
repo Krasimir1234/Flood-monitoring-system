@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const app = express();
 app.use(express.json());
 
-// Define User Schema with realName, lastName, username, and email
+
 const userSchema = new mongoose.Schema({
   realName: String,
   lastName: String,
@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-// Signup endpoint
+
 app.post('/api/signup', async (req, res) => {
   const { realName, lastName, username, email, password, bio } = req.body;
 
@@ -42,7 +42,7 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
-// Login endpoint supporting both email and username
+
 app.post('/api/login', async (req, res) => {
   const { emailOrUsername, password } = req.body;
 
