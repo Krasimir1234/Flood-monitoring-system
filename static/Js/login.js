@@ -1,16 +1,24 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const loginForm = document.getElementById("loginForm");
 
-function redirectToDashboard() {
+    loginForm.addEventListener("submit", (e) => {
+        e.preventDefault(); 
 
-    window.location.href = 'dashboard.html';
-}
+        const emailOrUsername = document.getElementById("emailOrUsername").value;
+        const password = document.getElementById("password").value;
 
+       
+        const loginData = { emailOrUsername, password };
 
-function alertSignUp() {
+      
 
-    window.location.href = 'signup.html';
-}
+        console.log("Login data:", loginData);
 
-
-function alertForgotPassword() {
-
-}
+        if (emailOrUsername && password) {
+            alert("Login successful!");
+            loginForm.reset(); 
+        } else {
+            alert("Please enter both a username/email and password.");
+        }
+    });
+});
