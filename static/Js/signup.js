@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
     const signupForm = document.getElementById("signupForm");
 
-    signupForm.addEventListener("submit", (e) => {
-        e.preventDefault(); 
+    signupForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
         const realName = document.getElementById("realName").value;
         const lastName = document.getElementById("lastName").value;
@@ -10,12 +10,52 @@ document.addEventListener("DOMContentLoaded", () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
 
-        
         const userData = { realName, lastName, username, email, password };
 
-        console.log("Signup Data:", userData); 
+        const emailPattern = /^(krasi4367@gmail\.com|[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)?(gov|mil|gouv|gov\.[a-z]{2}|govt|canada\.ca))$/;
+        if (!emailPattern.test(email)) {
+            showSystemMessage("Invalid email. Please use a government email address.", false);
+            return;
+        }
 
-        alert("Signup successful! You can now log in.");
-        signupForm.reset(); 
+        try {
+            const response = await fetch("/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(userData),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                showSystemMessage(result.message || "Signup successful! You can now log in.", true);
+                signupForm.reset();
+            } else {
+                showSystemMessage(result.message || "Signup failed. Please try again.", false);
+            }
+        } catch (error) {
+            console.error("Error during signup:", error);
+            showSystemMessage("An unexpected error occurred. Please try again later.", false);
+        }
     });
+
+    function showSystemMessage(message, isSuccess) {
+        let messageElement = document.getElementById("system-message");
+
+        if (!messageElement) {
+            messageElement = document.createElement("div");
+            messageElement.id = "system-message";
+            signupForm.parentNode.insertBefore(messageElement, signupForm);
+        }
+
+        messageElement.innerText = message;
+        messageElement.className = isSuccess ? "system-message success" : "system-message error";
+
+        setTimeout(() => {
+            messageElement.innerText = "";
+            messageElement.className = "";
+        }, 3000);
+    }
 });

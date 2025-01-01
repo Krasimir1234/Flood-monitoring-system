@@ -2,168 +2,105 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 body {
-    background-color: #e0f7fa;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    padding: 20px;
 }
 
 .profile-container {
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
     padding: 40px;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    max-width: 600px;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
     width: 100%;
     text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.profile-pic {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
+.profile-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
 }
 
-.profile-pic img {
+.profile-picture img {
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
+    width: 120px;
+    height: 120px;
     object-fit: cover;
-    margin-bottom: 10px;
-}
-
-.profile-pic button {
-    background-color: #0288d1;
-    padding: 8px 16px;
-    border: none;
-    color: white;
-    font-size: 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.profile-pic button:hover {
-    background-color: #0277bd;
-    transform: translateY(-2px);
-}
-
-.profile-pic input[type="file"] {
-    display: none;
+    border: 5px solid #4facfe;
+    margin-bottom: 20px;
 }
 
 .profile-info {
-    margin-bottom: 30px;
     width: 100%;
+    margin-bottom: 20px;
 }
 
 .profile-info label {
     display: block;
-    margin-bottom: 5px;
-    color: #01579b;
+    color: #0277bd;
     font-weight: bold;
+    margin-bottom: 5px;
+    text-align: left;
 }
 
 .profile-info span,
 .profile-info input {
     display: block;
     width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    padding: 12px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
     font-size: 14px;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease;
 }
 
-.profile-info input[type="text"],
-.profile-info input[type="email"] {
-    background-color: #f0f0f0;
+.profile-info input:focus {
+    border-color: #4facfe;
+    box-shadow: 0 0 5px rgba(79, 172, 254, 0.5);
+}
+
+.button-container {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    justify-content: center;
 }
 
 button {
-    padding: 12px 20px;
-    background-color: #0288d1;
+    padding: 12px 25px;
+    background: #4facfe;
+    color: #ffffff;
     border: none;
-    color: white;
+    border-radius: 8px;
     font-size: 16px;
-    border-radius: 6px;
+    font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    width: 140px;
+    text-align: center;
 }
 
 button:hover {
-    background-color: #0277bd;
+    background: #0277bd;
     transform: translateY(-2px);
 }
 
-.report-submission {
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    margin-top: 20px;
-    width: 100%;
-    text-align: center;
-}
-
-.report-submission h2 {
-    margin-bottom: 20px;
-    color: #01579b;
-}
-
-.report-submission input,
-.report-submission textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-.report-submission textarea {
-    resize: vertical;
-    height: 100px;
-}
-
-.report-submission button {
-    padding: 12px 20px;
-    background-color: #0288d1;
-    border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.report-submission button:hover {
-    background-color: #0277bd;
-    transform: translateY(-2px);
-}
-
-footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: white;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-}
-
-footer p {
-    font-size: 14px;
+button:active {
+    transform: translateY(0);
 }

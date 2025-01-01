@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-
-        <script>
-            L_NO_TOUCH = false;
-            L_DISABLE_3D = false;
-        </script>
-
+    <script>
+        L_NO_TOUCH = false;
+        L_DISABLE_3D = false;
+    </script>
     <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
     <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
     <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
@@ -21,79 +18,275 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <style>
+        #map_4dd70a0199837d8d02d335dad5f030b9 {
+            position: relative;
+            width: 100.0%;
+            height: 100.0%;
+            left: 0.0%;
+            top: 0.0%;
+        }
+        .leaflet-container { font-size: 1rem; }
+    </style>
+    <nav class="navbar navbar-expand-lg" style="background-color: #343a40;">
+        <div class="container-fluid">
+            <!-- Brand Name -->
+            <a class="navbar-brand fw-bold" href="#" style="color: #ffffff; font-size: 1.5rem;">Flood Reporter</a>
+            <!-- Toggler for smaller screens -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="color: #ffffff;"></span>
+            </button>
+            <!-- Navbar Links -->
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <!-- Profile Link -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-bold" href="/profile">Profile</a>
+                    </li>
+                    <!-- Information Link -->
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-bold" href="info.html">Information</a>
+                    </li>
+                    <!-- Report Button -->
+                    <li class="nav-item">
+                        <button type="button" id="reportButton" class="btn btn-warning ms-3" data-bs-toggle="modal" data-bs-target="#reportModal">
+                            Report
+                        </button>
+                    </li>
+                    <!-- Logout Button -->
+                    <li class="nav-item">
+                        <button id="logoutButton" class="btn btn-danger ms-3">Logout</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-            <meta name="viewport" content="width=device-width,
-                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            <style>
-                #map_4dd70a0199837d8d02d335dad5f030b9 {
-                    position: relative;
-                    width: 100.0%;
-                    height: 100.0%;
-                    left: 0.0%;
-                    top: 0.0%;
-                }
-                .leaflet-container { font-size: 1rem; }
-            </style>
 
 </head>
 <body>
+    <div class="folium-map" id="map_4dd70a0199837d8d02d335dad5f030b9"></div>
+
+    <!-- Modal for Reporting -->
+    <!-- Modal for Reporting -->
+<!-- Modal for Reporting -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header" style="background-color: #495057; color: #f8f9fa;">
+                <h5 class="modal-title" id="reportModalLabel">Report Flood</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="reportForm">
+                    <div class="mb-3">
+                        <label for="addressInput" class="form-label fw-bold" style="color: #495057;">Address in Austria</label>
+                        <input type="text" class="form-control" id="addressInput" placeholder="Enter an address" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descriptionInput" class="form-label fw-bold" style="color: #495057;">Description</label>
+                        <textarea class="form-control" id="descriptionInput" rows="4" placeholder="Enter description"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" style="background-color: #6c757d; border: none;">Submit Report</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
-            <div class="folium-map" id="map_4dd70a0199837d8d02d335dad5f030b9" ></div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var map_4dd70a0199837d8d02d335dad5f030b9 = L.map("map_4dd70a0199837d8d02d335dad5f030b9", {
+            center: [47.5162, 14.5501],
+            crs: L.CRS.EPSG3857,
+            zoom: 7,
+            zoomControl: true,
+            preferCanvas: false,
+        });
+
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
+
+        // Fetch and display flood data from data.json
+        fetch("static/data.json")
+            .then(response => response.json())
+            .then(floodData => {
+                console.log("Flood data loaded:", floodData);
+
+                // Define thresholds for water levels
+                const thresholds = {
+                    medium: 5, // Medium threshold (m³/s)
+                    critical: 15 // Critical threshold (m³/s)
+                };
+
+                // Define icons for medium and critical levels
+                const mediumIcon = L.AwesomeMarkers.icon({
+                    icon: "exclamation",
+                    markerColor: "orange",
+                    prefix: "fa",
+                });
+
+                const criticalIcon = L.AwesomeMarkers.icon({
+                    icon: "exclamation-triangle",
+                    markerColor: "red",
+                    prefix: "fa",
+                });
+
+                // Filter and classify flood data
+                const filteredFloodData = floodData.map(entry => {
+                    const value = parseFloat(entry.wert);
+                    if (isNaN(value)) return null;
+
+                    if (value >= thresholds.critical) {
+                        return { ...entry, level: "critical", icon: criticalIcon };
+                    } else if (value >= thresholds.medium) {
+                        return { ...entry, level: "medium", icon: mediumIcon };
+                    } else {
+                        return null; // Skip safe values
+                    }
+                }).filter(entry => entry !== null);
+
+                console.log("Filtered flood data:", filteredFloodData);
+
+                // Add markers to the map
+                filteredFloodData.forEach(entry => {
+                    const marker = L.marker([entry.latitude, entry.longitude], {
+                        icon: entry.icon
+                    }).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
+
+                    marker.bindPopup(`
+                        <strong>River:</strong> ${entry.gewaesser}<br>
+                        <strong>Value:</strong> ${entry.wert} ${entry.einheit}<br>
+                        <strong>Time:</strong> ${entry.zeitpunkt}
+                    `);
+                });
+            })
+            .catch(error => console.error("Error loading flood data:", error));
+
+
+        fetch("static/geojson/map.geojson")
+            .then(response => response.json())
+            .then(data => {
+                const polygonCoordinates = data.features.flatMap(feature => feature.geometry.coordinates);
+
+                const austriaPolygon = {
+                    "type": "Feature",
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [polygonCoordinates]
+                    }
+                };
+
+                L.geoJSON(austriaPolygon, {
+                    style: {
+                        color: "blue",  // Border color
+                        weight: 2,      // Border thickness
+                        fillOpacity: 0  // No fill for Austria
+                    }
+                }).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
+
+                const worldMask = {
+                    "type": "FeatureCollection",
+                    "features": [
+                        {
+                            "type": "Feature",
+                            "geometry": {
+                                "type": "Polygon",
+                                "coordinates": [
+                                    [[-180, -90], [180, -90], [180, 90], [-180, 90], [-180, -90]]
+                                ].concat([polygonCoordinates])
+                            }
+                        }
+                    ]
+                };
+
+                L.geoJSON(worldMask, {
+                    style: {
+                        color: "grey",
+                        weight: 1,
+                        fillOpacity: 0.7,
+                        fillColor: "grey"
+                    }
+                }).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
+            })
+            .catch(error => console.error("Error loading GeoJSON:", error));
+
+        // Handle Logout
+        document.getElementById('logoutButton').addEventListener('click', async function () {
+            try {
+                const response = await fetch('/logout', { method: 'POST' });
+                if (response.ok) {
+                    alert('Logged out successfully');
+                } else {
+                    console.warn('Logout request failed. Redirecting to login anyway.');
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                alert('An error occurred while logging out.');
+            } finally {
+                window.location.href = '/login';
+            }
+        });
+
+        // Handle Report Submission
+        document.getElementById('reportForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const address = document.getElementById('addressInput').value;
+            const description = document.getElementById('descriptionInput').value;
+
+            try {
+                const geocodeResponse = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}, Austria`);
+                const geocodeData = await geocodeResponse.json();
+
+                if (geocodeData.length > 0) {
+                    const { lat, lon } = geocodeData[0];
+
+                    const marker = L.marker([lat, lon]).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
+                    marker.bindPopup(`<strong>${address}</strong><br>${description}`).openPopup();
+
+                    const reportResponse = await fetch('/report', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ address, description, lat, lon }),
+                    });
+
+                    if (!reportResponse.ok) {
+                        throw new Error('Failed to save the report.');
+                    }
+
+                    alert('Report submitted successfully!');
+                    document.getElementById('reportForm').reset();
+                    bootstrap.Modal.getInstance(document.getElementById('reportModal')).hide();
+                } else {
+                    alert('Unable to find location. Please enter a valid address.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the report.');
+            }
+        });
+
+        // Handle Profile Redirect
+        const profileButton = document.querySelector('.nav-link[href="profile.html"]');
+        if (profileButton) {
+            profileButton.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent default link behavior
+                console.log('Redirecting to profile.html');
+                window.location.href = 'profile.html'; // Redirect to the profile page
+            });
+        } else {
+            console.error("Profile button not found.");
+        }
+    });
+</script>
+
+
 
 </body>
-<script>
-
-
-            var map_4dd70a0199837d8d02d335dad5f030b9 = L.map(
-                "map_4dd70a0199837d8d02d335dad5f030b9",
-                {
-                    center: [47.5162, 14.5501],
-                    crs: L.CRS.EPSG3857,
-                    zoom: 7,
-                    zoomControl: true,
-                    preferCanvas: false,
-                }
-            );
-
-
-
-
-
-            var tile_layer_a43ada860c5d39fc8ca1da1df94f6e95 = L.tileLayer(
-                "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {"attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors", "detectRetina": false, "maxNativeZoom": 19, "maxZoom": 19, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            );
-
-
-            tile_layer_a43ada860c5d39fc8ca1da1df94f6e95.addTo(map_4dd70a0199837d8d02d335dad5f030b9);
-
-
-            var marker_413475f6824b54d8ed400a022821c5ca = L.marker(
-                [48.2082, 16.3738],
-                {}
-            ).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
-
-
-            var icon_0f58f47eeac7eb60a8d08daa5886d4a6 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "info-sign", "iconColor": "white", "markerColor": "blue", "prefix": "glyphicon"}
-            );
-            marker_413475f6824b54d8ed400a022821c5ca.setIcon(icon_0f58f47eeac7eb60a8d08daa5886d4a6);
-
-
-        var popup_b1d515325047df9b2a1a1a3443095451 = L.popup({"maxWidth": "100%"});
-
-
-
-                var html_4d2af8b785f9b10d227ec894758b4558 = $(`<div id="html_4d2af8b785f9b10d227ec894758b4558" style="width: 100.0%; height: 100.0%;">Vienna</div>`)[0];
-                popup_b1d515325047df9b2a1a1a3443095451.setContent(html_4d2af8b785f9b10d227ec894758b4558);
-
-
-
-        marker_413475f6824b54d8ed400a022821c5ca.bindPopup(popup_b1d515325047df9b2a1a1a3443095451)
-        ;
-
-
-
-</script>
 </html>
