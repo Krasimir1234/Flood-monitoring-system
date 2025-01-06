@@ -1,4 +1,4 @@
-// Fetch user data and populate the profile fields
+
 async function loadUserProfile() {
     try {
         const response = await fetch('/get_user_profile', {
@@ -11,7 +11,7 @@ async function loadUserProfile() {
         if (response.ok) {
             const user = await response.json();
 
-            // Populate the fields dynamically
+
             document.getElementById('nameDisplay').textContent = user.name || 'N/A';
             document.getElementById('emailDisplay').textContent = user.email || 'N/A';
             document.getElementById('usernameDisplay').textContent = user.username || 'N/A';
@@ -28,7 +28,7 @@ async function loadUserProfile() {
     }
 }
 
-// Enable profile editing
+
 function editProfile() {
     document.getElementById('nameDisplay').style.display = 'none';
     document.getElementById('emailDisplay').style.display = 'none';
@@ -42,7 +42,7 @@ function editProfile() {
     document.getElementById('saveBtn').style.display = 'inline-block';
 }
 
-// Save profile changes
+
 async function saveProfile() {
     const name = document.getElementById('nameInput').value;
     const email = document.getElementById('emailInput').value;
@@ -60,7 +60,7 @@ async function saveProfile() {
         const result = await response.json();
         if (result.status === 'success') {
             alert('Profile updated successfully');
-            window.location.reload(); // Reload page to reflect changes
+            window.location.reload();
         } else {
             alert(result.message || 'Failed to update profile');
         }
@@ -70,13 +70,13 @@ async function saveProfile() {
     }
 }
 
-// Handle Logout
+
 document.getElementById('logoutButton').addEventListener('click', async function () {
     try {
         const response = await fetch('/logout', { method: 'POST' });
         if (response.ok) {
             alert('Logged out successfully');
-            window.location.href = '/login'; // Redirect to login page
+            window.location.href = '/login';
         } else {
             console.warn('Logout request failed.');
         }
@@ -86,5 +86,5 @@ document.getElementById('logoutButton').addEventListener('click', async function
     }
 });
 
-// Load user profile on page load
+
 document.addEventListener('DOMContentLoaded', loadUserProfile);

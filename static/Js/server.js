@@ -8,7 +8,7 @@ app.use(express.json());
 const userSchema = new mongoose.Schema({
   realName: String,
   lastName: String,
-  username: { type: String, unique: true }, // Ensure unique usernames
+  username: { type: String, unique: true },
   email: { type: String, unique: true },
   password: String,
   bio: String,

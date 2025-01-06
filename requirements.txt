@@ -1,6 +1,8 @@
 folium==0.18.0
 Flask==3.0.3
-
+beautifulsoup4==4.12.3
+geopandas==0.13.2
+matplotlib==3.8.0
 
 
 mysql~=0.0.3

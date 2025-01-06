@@ -3,16 +3,15 @@ import sqlite3
 import re
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Required for session management
+app.secret_key = 'your_secret_key'
 
 
-# Initialize the database schema
+
 def initialize_database():
     connection = sqlite3.connect("flood_monitor.db")
     cursor = connection.cursor()
 
     try:
-        # Create users table
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,7 +25,7 @@ def initialize_database():
         );
         """)
 
-        # Create flood_reports table
+
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS flood_reports (
             report_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -125,7 +124,7 @@ def login():
                 stored_password = result[0]
 
                 if stored_password == password:
-                    session['user'] = email_or_username  # Set session data
+                    session['user'] = email_or_username
                     return jsonify({"status": "success", "message": "Login successful!", "redirect": "/map"}), 200
                 else:
                     return jsonify({"status": "error", "message": "Invalid password."}), 401
@@ -195,14 +194,13 @@ def report():
 @app.route('/profile')
 def profile():
     if 'user' not in session:
-        return "Unauthorized Access", 401  # Ensure user is logged in
+        return "Unauthorized Access", 401
 
     email_or_username = session['user']
     connection = sqlite3.connect("flood_monitor.db")
     cursor = connection.cursor()
 
     try:
-        # Fetch user details based on email or username
         cursor.execute("""
             SELECT name, email, username, profile_picture_url
             FROM users
@@ -248,7 +246,7 @@ def update_profile():
         """, (name, email, username, email_or_username, email_or_username))
         connection.commit()
 
-        session['user'] = email  # Update session with the new email
+        session['user'] = email
         return jsonify({"status": "success", "message": "Profile updated successfully"})
     except sqlite3.Error as e:
         print(f"Error updating profile: {e}")
@@ -258,7 +256,6 @@ def update_profile():
         connection.close()
 @app.route('/get_user_profile', methods=['GET'])
 def get_user_profile():
-    # Ensure the user is logged in
     if 'user' not in session:
         return jsonify({"status": "error", "message": "Unauthorized access"}), 401
 
@@ -267,7 +264,6 @@ def get_user_profile():
     cursor = connection.cursor()
 
     try:
-        # Fetch user details based on email or username
         cursor.execute("""
             SELECT name, email, username, profile_picture_url
             FROM users
@@ -276,7 +272,6 @@ def get_user_profile():
         user = cursor.fetchone()
 
         if user:
-            # Return user data as JSON
             return jsonify({
                 "status": "success",
                 "name": user[0],

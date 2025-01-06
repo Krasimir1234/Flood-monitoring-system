@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("loginForm");
 
+
     loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
-
 
         const emailOrUsername = document.getElementById("emailOrUsername").value;
         const password = document.getElementById("password").value;
@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 window.location.href = result.redirect;
             } else {
-
                 const errorElement = document.createElement("p");
                 errorElement.innerText = result.message || "Invalid username/email or password.";
                 document.body.appendChild(errorElement);
@@ -39,5 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
             errorElement.innerText = "An unexpected error occurred. Please try again later.";
             document.body.appendChild(errorElement);
         }
+    });
+
+
+    const signupLink = document.getElementById("signupLink");
+    signupLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.location.href = "/";
     });
 });
