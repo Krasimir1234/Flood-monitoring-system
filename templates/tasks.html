@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks</title>
+    <link rel="stylesheet" href="static/css/tasks.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="static/js/tasks.js" defer></script>
+</head>
+<body>
+    <nav class="navbar">
+    <div class="container">
+        <a href="/" class="navbar-brand">Flood Reporter</a>
+        <ul class="navbar-menu">
+            <li><a href="/map">Map</a></li>
+            <li><a href="/profile">Profile</a></li>
+            <li><a href="/tasks">Tasks</a></li>
+        </ul>
+    </div>
+</nav>
+
+
+    <div class="tasks-container">
+        <h1>Flood Reports</h1>
+
+        <div id="reports-box">
+            <h2>Pending Reports</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="reports-table">
+
+                </tbody>
+            </table>
+        </div>
+
+        <div id="confirmed-box">
+            <h2>Confirmed Reports</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="confirmed-table">
+
+                </tbody>
+            </table>
+            <button id="clear-confirmed" class="clear-btn">Clear Done Tasks</button>
+        </div>
+
+        <div id="denied-box">
+            <h2>Denied Reports</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Latitude</th>
+                        <th>Longitude</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="denied-table">
+
+                </tbody>
+            </table>
+            <button id="clear-denied" class="clear-btn">Delete Denied Tasks</button>
+        </div>
+    </div>
+</body>
+</html>

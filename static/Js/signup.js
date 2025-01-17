@@ -12,9 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const userData = { realName, lastName, username, email, password };
 
-        const emailPattern = /^(krasi4367@gmail\.com|[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)?(gov|mil|gouv|gov\.[a-z]{2}|govt|canada\.ca))$/;
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailPattern.test(email)) {
-            showSystemMessage("Invalid email. Please use a government email address.", false);
+            showSystemMessage("Invalid email format. Please enter a valid email.", false);
             return;
         }
 

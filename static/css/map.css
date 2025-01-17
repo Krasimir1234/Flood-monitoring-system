@@ -7,7 +7,7 @@
 
 #map_4dd70a0199837d8d02d335dad5f030b9 {
     position: absolute;
-    top: 56px; /* Match the height of the navbar */
+    top: 56px;
     bottom: 0;
     right: 0;
     left: 0;
@@ -24,23 +24,23 @@ body {
     margin: 0;
 }
 
-/* Navbar Customization */
+
 .navbar {
-    position: fixed; /* Fix navbar at the top of the page */
+    position: fixed;
     top: 0;
     width: 100%;
-    z-index: 1050; /* Ensure it appears above other elements */
+    z-index: 1050;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Navbar Brand */
+
 .navbar-brand {
     font-size: 1.8rem;
     font-weight: bold;
     color: white !important;
 }
 
-/* Navbar Links */
+
 .navbar-nav .nav-link {
     margin-right: 20px;
     font-size: 1.1rem;
@@ -50,10 +50,9 @@ body {
 }
 
 .navbar-nav .nav-link:hover {
-    color: #adb5bd !important; /* Subtle hover effect */
+    color: #adb5bd !important;
 }
 
-/* Buttons in Navbar */
 .navbar .btn-warning {
     color: #ffffff;
     background-color: #ffc107;
@@ -82,17 +81,17 @@ body {
     transform: scale(1.05);
 }
 
-/* Toggler Icon for Small Screens */
+
 .navbar-toggler {
     border: none;
     color: #ffffff;
 }
 
-/* Modal Header */
+
 .modal-header {
-    background-color: #495057; /* Muted gray-blue */
+    background-color: #495057;
     border-bottom: 1px solid #6c757d;
-    color: #f8f9fa; /* Soft white text */
+    color: #f8f9fa;
 }
 
 .modal-header h5 {
@@ -106,43 +105,43 @@ body {
     filter: invert(100%);
 }
 
-/* Modal Body */
+
 .modal-body {
     padding: 20px 30px;
-    background-color: #f8f9fa; /* Light gray for form background */
+    background-color: #f8f9fa;
 }
 
 .modal-body .form-label {
     font-size: 1rem;
     font-weight: 600;
-    color: #495057; /* Subtle gray for labels */
+    color: #495057;
 }
 
 .modal-body input,
 .modal-body textarea {
     border-radius: 6px;
-    border: 1px solid #ced4da; /* Softer border */
-    background-color: #e9ecef; /* Light gray */
+    border: 1px solid #ced4da;
+    background-color: #e9ecef;
     font-size: 1rem;
     padding: 10px;
 }
 
 .modal-body input:focus,
 .modal-body textarea:focus {
-    border-color: #6c757d; /* Gray border on focus */
-    box-shadow: 0 0 5px rgba(108, 117, 125, 0.5); /* Subtle gray glow */
+    border-color: #6c757d;
+    box-shadow: 0 0 5px rgba(108, 117, 125, 0.5);
 }
 
-/* Submit Button */
+
 .modal-body .btn-primary {
     font-size: 1rem;
     font-weight: 600;
-    background-color: #6c757d; /* Muted gray */
+    background-color: #6c757d;
     border: none;
     transition: background-color 0.3s, transform 0.2s;
 }
 
 .modal-body .btn-primary:hover {
-    background-color: #5a6268; /* Darker muted gray on hover */
-    transform: scale(1.02); /* Slight scaling effect */
+    background-color: #5a6268;
+    transform: scale(1.02);
 }

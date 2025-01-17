@@ -52,6 +52,9 @@ def initialize_database():
         cursor.close()
         connection.close()
 
+@app.route('/map/second')
+def second_map():
+    return render_template('map_nongov.html')
 
 @app.route('/')
 def home():
@@ -72,8 +75,7 @@ def register():
         return jsonify({"status": "error", "message": "All fields are required."}), 400
 
     email_pattern = r'^(krasi4367@gmail\.com|[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)?(gov|mil|gouv|gov\.[a-z]{2}|govt|canada\.ca))$'
-    if not re.match(email_pattern, email):
-        return jsonify({"status": "error", "message": "Invalid email. Please use a government email address."}), 400
+    is_government_user = 1 if re.match(email_pattern, email) else 0
 
     full_name = f"{real_name} {last_name}"
 
@@ -82,9 +84,9 @@ def register():
         cursor = connection.cursor()
 
         cursor.execute("""
-        INSERT INTO users (name, email, username, password)
-        VALUES (?, ?, ?, ?)
-        """, (full_name, email, username, password))
+        INSERT INTO users (name, email, username, password, is_government_user)
+        VALUES (?, ?, ?, ?, ?)
+        """, (full_name, email, username, password, is_government_user))
         connection.commit()
 
         return jsonify({"status": "success", "message": "User registered successfully."}), 201
@@ -146,20 +148,26 @@ def logout():
 
 @app.route('/map')
 def map():
+    if 'user' not in session:
+        return "Unauthorized Access", 401
+
+    email_or_username = session['user']
     connection = sqlite3.connect("flood_monitor.db")
     cursor = connection.cursor()
 
     try:
-        cursor.execute("SELECT location AS address, description, latitude, longitude FROM flood_reports")
-        reports = cursor.fetchall()
+        cursor.execute("SELECT is_government_user FROM users WHERE email = ? OR username = ?", (email_or_username, email_or_username))
+        result = cursor.fetchone()
 
-        return render_template('map.html', reports=reports)
-    except Exception as e:
-        print(f"Error fetching reports: {e}")
-        return "An error occurred while loading the map.", 500
+        if result and result[0] == 1:
+            return render_template('map.html')
+        else:
+            return render_template('map_nongov.html')
     finally:
         cursor.close()
         connection.close()
+
+
 
 
 @app.route('/report', methods=['POST'])
@@ -288,6 +296,105 @@ def get_user_profile():
         cursor.close()
         connection.close()
 
+@app.route('/get_reports', methods=['GET'])
+def get_reports():
+    connection = sqlite3.connect("flood_monitor.db")
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("SELECT report_id, description, location, latitude, longitude, status FROM flood_reports")
+        reports = cursor.fetchall()
+
+        return jsonify([
+            {
+                "report_id": r[0],
+                "description": r[1],
+                "location": r[2],
+                "latitude": r[3],
+                "longitude": r[4],
+                "status": r[5] if r[5] else 'Unverified'
+            }
+            for r in reports
+        ])
+    except Exception as e:
+        print(f"Error fetching reports: {e}")
+        return jsonify([])
+    finally:
+        cursor.close()
+        connection.close()
+
+
+
+@app.route('/update_report_status', methods=['POST'])
+def update_report_status():
+    data = request.json
+    report_id = data.get('report_id')
+    status = data.get('status')
+
+    if not report_id or not status:
+        return jsonify({"success": False, "message": "Invalid data."}), 400
+
+    connection = sqlite3.connect("flood_monitor.db")
+    cursor = connection.cursor()
+
+    try:
+        cursor.execute("UPDATE flood_reports SET status = ? WHERE report_id = ?", (status, report_id))
+        connection.commit()
+
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error updating report status: {e}")
+        return jsonify({"success": False, "message": "Database error."}), 500
+    finally:
+        cursor.close()
+        connection.close()
+
+
+@app.route('/tasks', methods=['GET'])
+def tasks():
+    return render_template('tasks.html')
+
+@app.route('/clear_reports', methods=['POST'])
+def clear_reports():
+    data = request.json
+    report_ids = data.get('report_ids', [])
+
+    connection = sqlite3.connect("flood_monitor.db")
+    cursor = connection.cursor()
+
+    try:
+        for report_id in report_ids:
+            cursor.execute("DELETE FROM flood_reports WHERE report_id = ?", (report_id,))
+        connection.commit()
+
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error clearing reports: {e}")
+        return jsonify({"success": False}), 500
+    finally:
+        cursor.close()
+        connection.close()
+
+@app.route('/delete_reports', methods=['POST'])
+def delete_reports():
+    data = request.json
+    report_ids = data.get('report_ids', [])
+
+    connection = sqlite3.connect("flood_monitor.db")
+    cursor = connection.cursor()
+
+    try:
+        for report_id in report_ids:
+            cursor.execute("DELETE FROM flood_reports WHERE report_id = ?", (report_id,))
+        connection.commit()
+
+        return jsonify({"success": True})
+    except Exception as e:
+        print(f"Error deleting reports: {e}")
+        return jsonify({"success": False}), 500
+    finally:
+        cursor.close()
+        connection.close()
 
 
 

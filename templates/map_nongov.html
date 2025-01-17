@@ -35,57 +35,50 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon" style="color: #ffffff;"></span>
             </button>
-<div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-            <a class="nav-link text-white fw-bold" href="/profile">Profile</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-white fw-bold" href="/tasks">Tasks</a>
-        </li>
-        <li class="nav-item">
-            <button type="button" id="reportButton" class="btn btn-warning ms-3" data-bs-toggle="modal" data-bs-target="#reportModal">
-                Report
-            </button>
-        </li>
-        <li class="nav-item">
-            <button id="logoutButton" class="btn btn-danger ms-3">Logout</button>
-        </li>
-    </ul>
-</div>
-
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-white fw-bold" href="/profile">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <button type="button" id="reportButton" class="btn btn-warning ms-3" data-bs-toggle="modal" data-bs-target="#reportModal">
+                            Report
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button id="logoutButton" class="btn btn-danger ms-3">Logout</button>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
-
-
 </head>
 <body>
     <div class="folium-map" id="map_4dd70a0199837d8d02d335dad5f030b9"></div>
-<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
 
-            <div class="modal-header" style="background-color: #495057; color: #f8f9fa;">
-                <h5 class="modal-title" id="reportModalLabel">Report Flood</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="reportForm">
-                    <div class="mb-3">
-                        <label for="addressInput" class="form-label fw-bold" style="color: #495057;">Address in Austria</label>
-                        <input type="text" class="form-control" id="addressInput" placeholder="Enter an address" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="descriptionInput" class="form-label fw-bold" style="color: #495057;">Description</label>
-                        <textarea class="form-control" id="descriptionInput" rows="4" placeholder="Enter description"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100" style="background-color: #6c757d; border: none;">Submit Report</button>
-                </form>
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #495057; color: #f8f9fa;">
+                    <h5 class="modal-title" id="reportModalLabel">Report Flood</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm">
+                        <div class="mb-3">
+                            <label for="addressInput" class="form-label fw-bold" style="color: #495057;">Address in Austria</label>
+                            <input type="text" class="form-control" id="addressInput" placeholder="Enter an address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descriptionInput" class="form-label fw-bold" style="color: #495057;">Description</label>
+                            <textarea class="form-control" id="descriptionInput" rows="4" placeholder="Enter description"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" style="background-color: #6c757d; border: none;">Submit Report</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 
     <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -101,64 +94,8 @@
             attribution: "&copy; OpenStreetMap contributors"
         }).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
 
-        // Fetch and display flood data from data.json
-        fetch("static/data.json")
-            .then(response => response.json())
-            .then(floodData => {
-                console.log("Flood data loaded:", floodData);
-
-                // Define thresholds for water levels
-                const thresholds = {
-                    medium: 5, // Medium threshold (m³/s)
-                    critical: 15 // Critical threshold (m³/s)
-                };
-
-                // Define icons for medium and critical levels
-                const mediumIcon = L.AwesomeMarkers.icon({
-                    icon: "exclamation",
-                    markerColor: "orange",
-                    prefix: "fa",
-                });
-
-                const criticalIcon = L.AwesomeMarkers.icon({
-                    icon: "exclamation-triangle",
-                    markerColor: "red",
-                    prefix: "fa",
-                });
-
-                // Filter and classify flood data
-                const filteredFloodData = floodData.map(entry => {
-                    const value = parseFloat(entry.wert);
-                    if (isNaN(value)) return null;
-
-                    if (value >= thresholds.critical) {
-                        return { ...entry, level: "critical", icon: criticalIcon };
-                    } else if (value >= thresholds.medium) {
-                        return { ...entry, level: "medium", icon: mediumIcon };
-                    } else {
-                        return null; // Skip safe values
-                    }
-                }).filter(entry => entry !== null);
-
-                console.log("Filtered flood data:", filteredFloodData);
-
-                // Add markers to the map
-                filteredFloodData.forEach(entry => {
-                    const marker = L.marker([entry.latitude, entry.longitude], {
-                        icon: entry.icon
-                    }).addTo(map_4dd70a0199837d8d02d335dad5f030b9);
-
-                    marker.bindPopup(`
-                        <strong>River:</strong> ${entry.gewaesser}<br>
-                        <strong>Value:</strong> ${entry.wert} ${entry.einheit}<br>
-                        <strong>Time:</strong> ${entry.zeitpunkt}
-                    `);
-                });
-            })
-            .catch(error => console.error("Error loading flood data:", error));
-
-
-        fetch("static/geojson/map.geojson")
+        // Load GeoJSON for Austria boundaries
+        fetch("/static/geojson/map.geojson")
             .then(response => response.json())
             .then(data => {
                 const polygonCoordinates = data.features.flatMap(feature => feature.geometry.coordinates);
@@ -273,9 +210,6 @@
             console.error("Profile button not found.");
         }
     });
-</script>
-
-
-
+    </script>
 </body>
 </html>
